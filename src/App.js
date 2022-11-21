@@ -21,8 +21,9 @@ function App() {
     getUsuarios();
   }, []);
 
-  const getUsuarios = () => {
-    axios
+  const getUsuarios = async () => {
+    try {
+      const res = await axios
       .get(
         "https://us-central1-labenu-apis.cloudfunctions.net/labenusers/users",
         {
@@ -31,16 +32,24 @@ function App() {
           },
         }
       )
-      .then((res) => {
-        setUsuarios(res.data);
-      })
-      .catch((error) => {
-        console.log(error.response);
-      });
+      setUsuarios(res.data)
+
+    } catch (error){
+
+      console.log(error.response);
+    } 
+    
+      // .then((res) => {
+      //   setUsuarios(res.data);
+      // })
+      // .catch((error) => {
+      //   console.log(error.response);
+      // });
   };
 
-  const pesquisaUsuario = (pesquisa) => {
-    axios
+  const pesquisaUsuario = async(pesquisa) => {
+    try {
+      const response = await axios
       .get(
         `https://us-central1-labenu-apis.cloudfunctions.net/labenusers/users/search?name=${pesquisa.nome}&email=${pesquisa.email}`,
         {
@@ -49,14 +58,32 @@ function App() {
           },
         }
       )
-      .then((res) => {
-        setUsuarios(res.data);
-        setPageFlow(3)
-      })
-      .catch((error) => {
-        console.log(error.response);
-      });
-  };
+      setUsuarios(response.data);
+      setPageFlow(3)
+
+    } catch (error){
+      console.log(error.response)
+    }
+  }
+
+  // const pesquisaUsuario = (pesquisa) => {
+  //   axios
+  //     .get(
+  //       `https://us-central1-labenu-apis.cloudfunctions.net/labenusers/users/search?name=${pesquisa.nome}&email=${pesquisa.email}`,
+  //       {
+  //         headers: {
+  //           Authorization: "ana-sammi-barbosa",
+  //         },
+  //       }
+  //     )
+  //     .then((res) => {
+  //       setUsuarios(res.data);
+  //       setPageFlow(3)
+  //     })
+  //     .catch((error) => {
+  //       console.log(error.response);
+  //     });
+  // };
 
   const onChangeName = (e) => {
     setNome(e.target.value);
@@ -72,7 +99,7 @@ function App() {
       email,
     };
     setPesquisa(novaPesquisa);
-    pesquisaUsuario(pesquisa);
+    pesquisaUsuario(novaPesquisa);
     setNome("")
     setEmail("")
     

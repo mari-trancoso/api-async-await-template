@@ -35,29 +35,59 @@ export const EditarUsuario = (props) => {
     getDadosUsuario();
   }, []);
 
-  const editaUsuario = () => {
-    const body = {
+  const editaUsuario = async () => {
+
+    try {
+      const body = {
         name,
         email
       };
-      axios
-        .put(
-          `https://us-central1-labenu-apis.cloudfunctions.net/labenusers/users/${usuario.id}`,
-          body,
-          {
-            headers: {
-              Authorization: "ana-sammi-barbosa"
-            }
+
+      await axios .put(
+        `https://us-central1-labenu-apis.cloudfunctions.net/labenusers/users/${usuario.id}`,
+        body,
+        {
+          headers: {
+            Authorization: "ana-sammi-barbosa"
           }
-        )
-        .then(() => {
-          getDadosUsuario();
-          setEditar(!editar)
-        });
+        }
+      )
+      getDadosUsuario();
+      setEditar(!editar)
+
+    }
+
+    catch (error) {
+      console.log(error.response)
+    }
+
   }
 
-  const deletarUsuario = () => {
-    axios
+  // const editaUsuario = () => {
+  //   const body = {
+  //       name,
+  //       email
+  //     };
+  //     axios
+  //       .put(
+  //         `https://us-central1-labenu-apis.cloudfunctions.net/labenusers/users/${usuario.id}`,
+  //         body,
+  //         {
+  //           headers: {
+  //             Authorization: "ana-sammi-barbosa"
+  //           }
+  //         }
+  //       )
+  //       .then(() => {
+  //         getDadosUsuario();
+  //         setEditar(!editar)
+  //       });
+  // }
+
+  const deletarUsuario = async () => {
+    try{
+
+      await axios
       .delete(
         `https://us-central1-labenu-apis.cloudfunctions.net/labenusers/users/${usuario.id}`,
         {
@@ -66,15 +96,34 @@ export const EditarUsuario = (props) => {
           }
         }
       )
-      .then(() => {
-        alert("usuario removido");
-        // chama de novo o get usuarios pra atualizar a lista
-        props.getUsuarios();
-      })
-      .catch((err) => {
-        console.log(err.response);
-      });
-  };
+      alert("usuario removido");
+      // chama de novo o get usuarios pra atualizar a lista
+      props.getUsuarios();
+
+    } catch (error) {
+      console.log(error.response)
+    }
+  }
+
+  // const deletarUsuarioAntigo = () => {
+  //   axios
+  //     .delete(
+  //       `https://us-central1-labenu-apis.cloudfunctions.net/labenusers/users/${usuario.id}`,
+  //       {
+  //         headers: {
+  //           Authorization: "ana-sammi-barbosa"
+  //         }
+  //       }
+  //     )
+  //     .then(() => {
+  //       alert("usuario removido");
+  //       // chama de novo o get usuarios pra atualizar a lista
+  //       props.getUsuarios();
+  //     })
+  //     .catch((err) => {
+  //       console.log(err.response);
+  //     });
+  // };
 
 
   return (
